@@ -9,7 +9,7 @@ const App = () => {
 const [team, setTeam] = useState([]);
 const [money, setMoney] = useState(100)
 
-const zombieFighters = [
+const [zombieFighters, setZombieFighters] = useState([
   {
     id: 1,
     name: 'Survivor',
@@ -90,28 +90,32 @@ const zombieFighters = [
     agility: 6,
     img: 'https://pages.git.generalassemb.ly/modular-curriculum-all-courses/react-state-management-lab/assets/e41f26.png',
   },
-]
+])
 
+const handleAddFighter = (newFighter) => {
 
-const handleAddFighter = (newTeam) => {
-  if (money < newTeam.price) {
-    return console.log('you have not enough money')
-  }
-  const inTheTeam = team.find(member => member.id === newTeam.id)
-  if (inTheTeam) {
-    return console.log('you can not add the same zombie')
-  }
-  const zombieTeam = [...team, newTeam] 
-  setTeam(zombieTeam);
-  setMoney(money - newTeam.price)
-}; 
+    if (money < newFighter.price) {
+      return console.log('you have not enough money');
+    }
 
-const handleRemoveFighter = (newTeam) => {
+    const inTheTeam = team.find(member => member.id === newFighter.id);
+    if (inTheTeam) {
+      return console.log('you can not add the same zombie');
+    }
 
-  const zombieTeam = [...team, newTeam] 
-  setTeam(zombieTeam.filter(member => member.id !== newTeam.id));
-  setMoney(money + newTeam.price)
-}; 
+    setTeam([...team, newFighter]);
+
+    setZombieFighters(
+      zombieFighters.filter(z => z.id !== newFighter.id)
+    );
+    setMoney(money - newFighter.price);
+  };
+
+  const handleRemoveFighter = (fighter) => {
+    setTeam(team.filter(member => member.id !== fighter.id));
+    setZombieFighters([...zombieFighters, fighter]);
+    setMoney(money + fighter.price);
+  };
 
 const totalStrength = team.reduce((sum, member) => sum + member.strength, 0);
 const totalAgility = team.reduce((sum, member) => sum + member.agility, 0);
